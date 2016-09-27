@@ -1,12 +1,12 @@
 package randomtree;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Individual {
     private String classValue;
-    private ArrayList<String> attributes;
+    private List<String> attributes;
 
-    public Individual(String classValue, ArrayList<String> attributes) {
+    public Individual(String classValue, List<String> attributes) {
         this.classValue = classValue;
         this.attributes = attributes;
     }
@@ -17,7 +17,7 @@ public class Individual {
     public String getClassValue() {
         return classValue;
     }
-    public ArrayList<String> getAttributes() {
+    public List<String> getAttributes() {
         return attributes;
     }
     
@@ -27,8 +27,13 @@ public class Individual {
     public void setClassValue(String classValue) {
         this.classValue = classValue;
     }
-    public void setAttributes(ArrayList<String> attributes) {
+    public void setAttributes(List<String> attributes) {
         this.attributes = attributes;
+    }
+
+    @Override
+    public String toString() {
+        return "Individual{" + "classValue=" + classValue + ", attributes=" + attributes + "}\n";
     }
 
 }
