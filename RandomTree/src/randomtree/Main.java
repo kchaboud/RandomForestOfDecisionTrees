@@ -8,7 +8,7 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) {
-        String dataFile = "src/iris.data";
+        String dataFile = "data/iris.data";
         BufferedReader br = null;
         String line;
         int i = 0;
