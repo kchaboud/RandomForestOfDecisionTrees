@@ -12,7 +12,9 @@ public class Main {
 
     public static void main(String[] args) {
         List<Individual> individualsList = DataHandler.dataParsing("data/iris.data");
+        DecisionTree tree = new DecisionTree();
         System.out.println(individualsList);
+        System.out.println(tree.entropy(individualsList, 5.2f, 0));
     }
     
 }
