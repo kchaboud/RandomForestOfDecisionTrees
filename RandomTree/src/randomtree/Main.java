@@ -12,9 +12,13 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) { 
-        IndividualSet globalSet = DataHandler.parseData("data/iris.data");
-        System.out.println(globalSet);
-        System.out.println(floor(Math.random()*50));
+        IndividualSet learningSet = DataHandler.parseData("data/iris.data");
+        IndividualSet testingSet = new IndividualSet();
+        DataHandler.buildRandomIndividualSets(learningSet, testingSet);
+        System.out.println("\n\n LEARNING");
+        System.out.println(learningSet);
+        System.out.println("\n\n TEST");
+        System.out.println(testingSet);
     }
     
 }

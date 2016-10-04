@@ -3,6 +3,7 @@ package randomtree;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import static java.lang.Math.floor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -51,8 +52,19 @@ public final class DataHandler {
     public static void buildRandomIndividualSets(
             IndividualSet learningList,
             IndividualSet testList) {
-        float learningRate = 0.9f;
-        
-        List<Integer> lol = new ArrayList();       
+        float learningRatio = 0.9f;
+        int count = 0;
+        for(int i : learningList.getMetadata().values()) {    
+            int upperBound = i - (int)Math.floor(i * learningRatio);
+            for(int j = 0; j < upperBound; j++) {
+                int pos = (int)floor(Math.random() * (upperBound))
+                        + count;
+                testList.addIndividual(learningList.getIndividual(pos));
+                learningList.removeIndividual(pos);
+            }
+            count += (i-upperBound);
+        }
+        learningList.updateMetaData();
+        testList.updateMetaData();
     }
 }
