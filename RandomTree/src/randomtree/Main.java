@@ -11,10 +11,14 @@ import java.util.List;
 
 public class Main {
 
+
     public static void main(String[] args) { 
         IndividualSet globalSet = DataHandler.parseData("data/iris.data");
         System.out.println(globalSet);
         System.out.println(floor(Math.random()*50));
+        DecisionTree tree = new DecisionTree();
+        System.out.println(tree.entropy(globalSet, 5.2f, 0));
+
     }
     
 }

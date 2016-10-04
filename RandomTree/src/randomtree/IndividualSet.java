@@ -13,7 +13,8 @@ public class IndividualSet {
         this.infoList = evaluateInfoList(list);
        
     }
-    
+
+
     private Map<String,Integer> evaluateInfoList(List<Individual> list) {
         Map<String,Integer> infoList = new HashMap();
         for( Individual i : list) {
@@ -31,5 +32,15 @@ public class IndividualSet {
     public String toString() {
         return "IndividualSet{\n" + "infoList=" + infoList + ",\nlist=" + list + '}';
     }
-    
+
+    public Map<String, Integer> getInfoList()
+    {
+        return infoList;
+    }
+
+    public List<Individual> getList()
+    {
+        return list;
+    }
+        
 }
