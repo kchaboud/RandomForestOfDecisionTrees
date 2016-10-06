@@ -1,24 +1,19 @@
 package randomtree;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import tools.Tuple;
 import static java.lang.Math.floor;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
-
 
     public static void main(String[] args) { 
         IndividualSet globalSet = DataHandler.parseData("data/iris.data");
         System.out.println(globalSet);
         System.out.println(floor(Math.random()*50));
         DecisionTree tree = new DecisionTree();
-        System.out.println(tree.entropy(globalSet, 5.2f, 0));
-
+        System.out.println(tree.entropy(globalSet, 2.45f, 2));
+        
+        tree.bestSpliter(globalSet);
     }
-    
 }
