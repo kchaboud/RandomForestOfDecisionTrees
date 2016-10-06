@@ -6,9 +6,7 @@ import java.io.IOException;
 import static java.lang.Math.floor;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public final class DataHandler {
     /**
@@ -40,6 +38,7 @@ public final class DataHandler {
                 }
             }
         }
+        individualsList.sort(Individual.ClassNameComparator);
         return new IndividualSet(individualsList);
     }
     
