@@ -1,5 +1,6 @@
 package randomtree;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class Individual {
@@ -35,5 +36,16 @@ public class Individual {
     public String toString() {
         return "Individual{" + "classValue=" + classValue + ", attributes=" + attributes + "}\n";
     }
+    
+    public static Comparator<Individual> ClassNameComparator
+            = new Comparator<Individual>() {
+        @Override
+        public int compare(Individual i1, Individual i2) {
+            String className1 = i1.getClassValue().toUpperCase();
+            String className2 = i2.getClassValue().toUpperCase();
+
+            return className1.compareTo(className2);
+        }
+    };
 
 }
