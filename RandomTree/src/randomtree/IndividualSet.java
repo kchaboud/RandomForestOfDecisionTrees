@@ -1,7 +1,7 @@
 package randomtree;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +11,7 @@ public class IndividualSet {
     
    public IndividualSet() {
        this.list = new ArrayList<>();
-       this.metadata = new HashMap<>();
+       this.metadata = new LinkedHashMap<>();
    }
 
     public IndividualSet(List<Individual> list) {
@@ -48,7 +48,7 @@ public class IndividualSet {
     }
     
     private Map<String,Integer> evaluateMetaData(List<Individual> list) {
-        Map<String,Integer> metadata = new HashMap();
+        Map<String,Integer> metadata = new LinkedHashMap();
         for( Individual i : list) {
             if(metadata.containsKey(i.getClassValue())) {
                metadata.replace(i.getClassValue(), metadata.get(i.getClassValue())+1);
