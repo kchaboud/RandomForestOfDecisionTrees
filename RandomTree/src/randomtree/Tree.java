@@ -1,30 +1,33 @@
 package randomtree;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import tools.Tuple;
 
 public class Tree {
 
-    private int value;
+    private Map<String, Integer> value;
     private Tree leftTree;
     private Tree rightTree;
-    private List data;
-    private Double entropy; 
+    private IndividualSet data;
+    private float entropy; 
     private int criteraData; //Index of data which will be tested
-    private Double criteraTest; // Value of the test that separate data.
+    private float criteraTest; // Value of the test that separate data.
     
-    public Tree()
+    public Tree(IndividualSet data)
     {
-        this.value = 0;
+        this.value = data.getInfoList();
         this.leftTree = null;
         this.rightTree = null;
-        this.data = null;
-        this.entropy = 0.;
+        this.data = data;
+        this.entropy = 0f;
         this.criteraData = 0;
-        this.criteraTest = 0.;
+        this.criteraTest = 0f;
     }
-    public Tree(int value, Tree leftTree, Tree rightTree, List data, double entropy, int criteraData, double criteraTest)
+    public Tree(Tree leftTree, Tree rightTree, IndividualSet data, float entropy, int criteraData, float criteraTest)
     {
-        this.value = value;
+        this.value = data.getInfoList();
         this.leftTree = leftTree;
         this.rightTree = rightTree;
         this.data = data;
@@ -33,25 +36,45 @@ public class Tree {
         this.criteraTest = criteraTest;
     }
     
-    public void addChildren(int leftValue, int rightValue)
+    /**
+     * Cette fonction sépare data en deux selon split, et crée avec chaque 
+     * partie un arbre fils.
+     * @param split le tuple contenant l'index de l'attribut sur lequel on 
+     * sépare les données en deux et la valeur de séparation
+     */
+    public void splitData(Tuple<Integer,Float> split)
     {
-        addLeftTree(leftValue);
-        addRightTree(rightValue);
+        this.criteraData = split.getX();
+        this.criteraTest = split.getY();
+        List<Individual> notPassedList = new ArrayList();
+        List<Individual> PassedList = new ArrayList();
+        for(Individual i : data.getList())
+        {
+            if(Float.parseFloat(i.getAttributes().get(split.getX())) <= split.getY())
+            {
+                PassedList.add(i);
+            }
+            else
+            {
+                notPassedList.add(i);
+            }
+        }
+        addLeftChild(new IndividualSet(PassedList));
+        addRightChild(new IndividualSet(notPassedList));
+        this.data = null;
     }
-    public void addLeftTree(int leftValue)
+    
+    public void addLeftChild(IndividualSet data)
     {
-        this.leftTree = new Tree(leftValue, null, null, null, 0, 0, 0);
+        this.leftTree = new Tree(data);
     }
-    public void addRightTree(int rightValue)
+    public void addRightChild(IndividualSet data)
     {
-        this.rightTree = new Tree(rightValue, null, null, null, 0, 0, 0);
+        this.rightTree = new Tree(data);
     }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-    public int getValue() {
+    
+    
+    public Map<String, Integer> getValue() {
         return value;
     }
 
@@ -62,4 +85,37 @@ public class Tree {
     public Tree getRightTree() {
         return rightTree;
     }
+
+    public void setEntropy(float entropy)
+    {
+        this.entropy = entropy;
+    }
+
+    public void setCriteraData(int criteraData)
+    {
+        this.criteraData = criteraData;
+    }
+
+    public void setCriteraTest(float criteraTest)
+    {
+        this.criteraTest = criteraTest;
+    }
+
+    public IndividualSet getData()
+    {
+        return data;
+    }
+
+    public float getEntropy()
+    {
+        return entropy;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return "Tree{" + "entropie= "+ entropy + "value=" + value  + ", criteraData=" + criteraData + ", criteraTest=" + criteraTest+ ", \n\tleftTree=" + (leftTree != null?leftTree.toString():' ') + ", \r\trightTree=" + (rightTree != null?rightTree.toString():' ') + '}';
+    }
+    
+
 }
