@@ -6,71 +6,56 @@ import tools.Tuple;
 
 public class DecisionTree
 {
-    private Tree tree;
 
-    public DecisionTree(Tree tree)
-    {
-        this.tree = tree;
-    }
-
-    public Tree getTree()
-    {
-        return tree;
-    }
-    
-    
     /**
      * Calcule l'entropie résultant d'une séparation des données pour la valeur
      * split de l'attribut testedAttribute.
      * @param trainingList Données à annalyser
      * @param split Valeur discriminante
      * @param testedAttribute attribut testé
-     * @return l'entropie pondérée 
+     * @return l'entropie ou -1 si la population discriminée n'est pas représentative de l'échantillon (50%)
      */
     public float entropy(IndividualSet trainingList, float split, int testedAttribute)
     {
-        float infEntropy = 0, supEntropy = 0;
+        float entropy = 0;
         int nbTestPass = 0;
-        Map<String, Integer> lowerForAttribute = new HashMap();
+        Map<String, Integer> greaterForAttribute = new HashMap();
         for(String key : trainingList.getInfoList().keySet())
         {
-            lowerForAttribute.put(key, 0);
+            greaterForAttribute.put(key, 0);
         }
         for(Individual elem : trainingList.getList())
         {
             if(Float.parseFloat(elem.getAttributes().get(testedAttribute)) <= split)
             {
-                lowerForAttribute.replace(elem.getClassValue(), lowerForAttribute.get(elem.getClassValue()) + 1);
+                greaterForAttribute.replace(elem.getClassValue(), greaterForAttribute.get(elem.getClassValue()) + 1);
                 nbTestPass +=1;
             }
         }
-        for(Map.Entry<String, Integer> entry : lowerForAttribute.entrySet())
+        for(Map.Entry<String, Integer> entry : greaterForAttribute.entrySet())
         {
             if(entry.getValue() != 0)
             {
-                infEntropy += entry.getValue().floatValue() / nbTestPass * (Math.log10(entry.getValue().floatValue()/nbTestPass)/Math.log10(2));
+                entropy += entry.getValue().floatValue() / nbTestPass * (Math.log10(entry.getValue().floatValue()/nbTestPass)/Math.log10(2));
             }
         }
-        for(Map.Entry<String, Integer> entry : lowerForAttribute.entrySet())
-        {
-            float unpassedOfClass=  trainingList.getInfoList().get(entry.getKey())- entry.getValue();
-            if(unpassedOfClass != 0)
+            for(Map.Entry<String,Integer> entry : greaterForAttribute.entrySet())
             {
-                supEntropy += (unpassedOfClass / (trainingList.getList().size() - nbTestPass)) * (Math.log10( unpassedOfClass / (trainingList.getList().size() - nbTestPass))/Math.log10(2));
+                if(entry.getValue()*100/trainingList.getInfoList().get(entry.getKey()) >= 50) // On ne prends que les entropies qui discriminent au moins 20% d'une classe;
+                {
+                    return -entropy;
+                }
             }
-        }
-        infEntropy =  - infEntropy;
-        supEntropy = - supEntropy;
-        return (((float) nbTestPass/trainingList.getList().size()) * infEntropy) + (((float) (trainingList.getList().size() - nbTestPass)/trainingList.getList().size()) * supEntropy); // Moyenne pondérée des entropies
+            return -1; // Valeur d'entropie ignorée
     }
     
     /**
      * Détermine la meilleure valeur du meilleur attribut pour laquelle l'entropie est minimale
      * i.e. les données sont spéarée de la façon la plus certaine.
      * @param trainingData Données à annalyser
-     * @return Tuple (valeur, attribut)
+     * @return Tuple<valeur, attribut>
      */
-    public Tuple<Integer, Float> bestSplitter(IndividualSet trainingData)
+    public Tuple<Integer, Float> bestSpliter(IndividualSet trainingData)
     {   
         Map<Tuple<Integer,Float>, Float> entropies = new HashMap<>();
         float min, max;
@@ -85,7 +70,7 @@ public class DecisionTree
                 max = tmp > max ? tmp : max;
             }
             
-            for(float j = min; j <= max; j += 0.05)
+            for(float j = min; j < max; j += 0.05)
             {
                 entropies.put(new Tuple(i,j), this.entropy(trainingData, j, i));
             }
@@ -104,34 +89,9 @@ public class DecisionTree
                 bestSplit = key;
             }
         }
-        if(bestSplit != null)
-            System.out.println("L'entropie est minimale pour la valeur " + bestSplit.getY() + " de l'attribut : " + bestSplit.getX());
+        
+        System.out.println("L'entropie est minimale pour la valeur " + bestSplit.getY()+ " de l'attribut : " + bestSplit.getX());
         
         return bestSplit;
     }
-
-    @Override
-    public String toString()
-    {
-        return tree.toString();
-    }
-    
-    /**
-     * Cette fonction récursive construit l'arbre en séparant le jeu de données 
-     * du bud en deux buds fils les plus purs possibles.
-     * @param bud noeud(ou feuille) de l'arbre dont on souhaite réaliser le split
-     */
-    public void build(Tree bud)
-    {
-        Tuple<Integer, Float> best;
-        best = this.bestSplitter(bud.getData());
-        if(best != null)
-        {
-            bud.setEntropy(this.entropy(bud.getData(), best.getY(), best.getX()));
-            bud.splitData(best);
-            this.build(bud.getLeftTree());
-            this.build(bud.getRightTree());
-        }
-    }
-    
 }
