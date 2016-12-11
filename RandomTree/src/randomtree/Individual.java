@@ -1,9 +1,10 @@
 package randomtree;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.List;
 
-public class Individual {
+public class Individual implements Serializable{
     private String classValue;
     private List<String> attributes;
 

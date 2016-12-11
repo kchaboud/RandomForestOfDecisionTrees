@@ -1,18 +1,25 @@
 package randomtree;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class IndividualSet {
+public class IndividualSet implements Serializable{
     private Map<String, Integer> metadata;
     private List<Individual> list;
     
-   public IndividualSet() {
+    public IndividualSet() {
        this.list = new ArrayList<>();
        this.metadata = new LinkedHashMap<>();
-   }
+    }
+    
+    public IndividualSet(IndividualSet set)
+    {
+        this.list = new ArrayList<>(set.getList());
+        this.metadata = new LinkedHashMap<>(set.getMetadata());
+    }
 
     public IndividualSet(List<Individual> list) {
         this.list = list;
@@ -64,5 +71,6 @@ public class IndividualSet {
     public String toString() {
         return "IndividualSet{\n" + "metadata=" + metadata + ",\nlist=" + list + '}';
     }
+    
     
 }
